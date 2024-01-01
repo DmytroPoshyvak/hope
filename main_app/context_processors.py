@@ -11,7 +11,7 @@ def basket(request):
     productss = ProductInBasket.objects.filter(is_active = True , session_key = session_key)
     all_products = Product.objects.filter(is_active = True).count()
     products_amount = productss.count()
-    acc = MyCustomUser.objects.get(id = 12)
+    acc = MyCustomUser.objects.get(id = 1)
     orders = Order.objects.filter(is_active=True)
     products = Product.objects.filter(is_active = True)[:8]
     return locals()
