@@ -85,10 +85,12 @@
                 <input type="email" name="{{ form.email.html_name }}" value = "{{ user.email }}" class="form-control" style="display: none;">
                 <input type="text" name="{{ form.name.html_name }}" value = "{{ user.username }}" class="form-control" style="display: none;">
                 <input type="number" name="{{ form.phon.html_name }}" value = "{{ user.phone }}" class="form-control" style="display: none;">
-                <input type="number" name="{{ form.age.html_name }}" value = "{{ user.age }}" class="form-control" style="display: none;">
+                <input type="number" name="{{ form.age.html_name }}" value = "0" class="form-control" style="display: none;">
             {% else %}
             <div class="upy">
                 <div class='personal_data'>
+                    <input name = 'id' value = "0" class="form-control" style="display: none;">
+                    <input type="number" name="{{ form.age.html_name }}" value = "0" class="form-control" style="display: none;">
                     <div>
                         <label>Full Name</label>
                         <span class="form-error">{{ form.name.errors }}</span>

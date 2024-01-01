@@ -210,7 +210,7 @@ def check_out(request):
             print(updated_data , 'WHATCH' , new_data)
             if len(updated_data) >= 1:
                 if name:
-                    if user:
+                    if user and int(user) != 0:
                         print(user , 'SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
                         order = Order.objects.create(session_key=session_key, name=name, email=email, is_active=True , user_id = user)
                     else:
