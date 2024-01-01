@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Account</title>
+</head>
+<style>
+    .testy{
+        margin-top: 120px;
+    }
+</style>
+<body>
+    <div class="container roman">
+        <div class="account-box">
+            <div class="accont">
+                <div class="person">
+                    <div class="personal_photo">
+                        <img src="/static/images/aaa.png" class="pers_photo">
+                    </div>
+                    <div class = 'personal_inf'>
+                        <h1>Hello {{user.username}}</h1>
+                        <h3>Phone Number - {{user.phone}}</h3>
+                        <h3>Email - {{user.email}}</h3>
+                        <!-- <p href = "#">Settings</p> -->
+                    </div>
+                </div>
+                {% for i in orders %}
+                    {% if i.is_active %}
+                    <div class="inner">
+                        <div class="top-gun">
+                            <div class="product-info">
+                                {% for n in m %}
+                                    {% if n.order == i %}
+                                    <div class="product-item">
+                                        <img src="{{ n.product.photos_set.first.photot.url }}" alt="{{ i.product.name }}" class='img-es' />
+                                        <div class="product-details">
+                                            <p id="kros"><b>PRODUCT -</b> {{ n }}</p>
+                                            <p id="m100m" style="display: none;"><b>PRODUCT -</b> {{ n.product.short }}</p>
+                                            <p><b>PRICE - </b> {{ n.product_total_price }} грн</p>
+                                            <p><b>CAPACITY - </b> {{ n.product.category }}</p>
+                                            <p class="hidden">{ n.product_total_price }</p>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="order-summary">
+                                <p style="margin: 0;"><b class="total-price">TOTAL:</b> {{ i.total_price }} грн</p>
+                                <p style="margin: 0;"><b class="status">STATUS -</b> {{ i.status }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function(){
+        $(".hidden").each(function(){
+                products_total_amount += parseInt($(this).text())
+        })
+    })
+</script>
+</html>
+
+
+{% endblock content %}

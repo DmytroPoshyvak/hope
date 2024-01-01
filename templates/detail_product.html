@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<link rel='stylesheet' href="{% static 'css/product_detail.css' %}">
+<style>
+    /* .fox{
+        margin-top: 100px !important;
+    } */
+    .product-box{
+        margin-top:100px
+    }
+    .nn{
+        margin-top: 100px;
+    }
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#des").click(function(){
+            $("#desc").css('display' , 'block');
+            $("#char").css('display' , 'none');
+            $("#deli").css('display' , 'none');
+        });
+        $("#cha").click(function(){
+            $("#desc").css('display' , 'none');
+            $("#char").css('display' , 'block');
+            $("#deli").css('display' , 'none');
+        });
+        $("#del").click(function(){
+            $("#desc").css('display' , 'none');
+            $("#char").css('display' , 'none');
+            $("#deli").css('display' , 'block');
+        });
+    });
+</script>
+<section>
+    <div class='product-box'>
+        <div class = 'container product'>
+            <div class='product-left'>
+                {% for i in photos %}
+                    {% if i.product.is_prespense %}
+                        <img src="{{ i.photot.url }}" class="seel">
+                    {% else %}
+                        <img style = "  filter: grayscale(100%); "src="{{ i.photot.url }}" class="seel calm">
+                        <h1>NOT AVALIABLE</h1>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <div class='product-right'>
+                <p id='rt'>ROUTE</p>
+                <div class='route'>
+                    <p><a href="{% url 'index' %}">Home</a>/<a href="{{ object.category.get_absolute_url }}">{{ object.category }}</a>/<a href="{{ object.get_absolute_url }}">{{ object.slug }}</a>/</p>
+                </div>
+                <h1>{{ object.name }}</h1>
+                    {% if object.discount %}
+                        <div class='price_plus'>
+                            <p><b>DISCOUNT : </b>{{ object.discount }}%</p>
+                            <div class='price_price'>
+                                <p class='precedence'>{{ object.price_with_discount }}₴</p>
+                                <strike class='not_precedence'>{{ object.price }}₴</strike>
+                            </div>
+                        </div>
+                    {% else %}
+                    <div class='price'>
+                        <p>{{ object.price }}₴</p>
+                    </div>
+                    {% endif %}
+                    <form class="main_form" action="{% url 'busket_adding' %}">
+                        {% csrf_token %}
+                        <div class='buy'>
+                            <input id='number' type='number' value= 1 min=1>
+                        </div>
+                        <button id='needed_btn' type='submit' data-product_id = "{{ object.id }}" data-product_name="{{ object.name }}"
+                        data-product_price = "{{ object.price_with_discount }}"
+                        data-product_id = "{{ object.id }}">BUY</button>
+                    </form>
+                <div class='tab' style="display: none;">
+                    <div class='tab-top'>
+                        <button id='des'>Descriptions</button>
+                        <button id='cha'>Charasterics</button>
+                        <button id='del'>Delivery</button>
+                    </div>
+                    <div class='tab-bottom'>
+                        <p id='desc'>{{ object.description }}</p>
+                        <p id='char'>{{ object.product_characteristic}}</p>
+                        <p id='deli'>{% lorem 1 b random %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <h3 id='megan' style="color: black">YOU CAN BE ALSO INTERESTED IN</h3>
+            <div class='wraper-2'>
+                {% for i in products %}
+                    <div class='test-2'>
+                        <a href = "{{ i.get_absolute_url }}" style="text-decoration: none;
+                                                                    color:black">
+                            <div class='card-2'>
+                                <div class='card-top-2' style='position:relative;'>
+                                    <button class="fav"><img src = "static/images/sos.png"></button>
+                                    {% if i.is_new and i.discount %}
+                                        <p style='position:absolute;' class='h7dis'>{{i.discount}}% off</p>
+                                        <p style='position:absolute;' class='h8dis'>new</p>
+                                    {% elif i.discount %}
+                                        <p style='position:absolute;' class='h5dis'>{{ i.discount }}% off</p>
+                                    {% elif i.is_new %}
+                                        <p style='position:absolute;' class='h6dis'>new</p>
+                                    {% endif %}
+                                    {% for n in i.photos_set.all %}
+                                            {% if n.product.name == i.name %}
+                                            {% if n.product.is_prespense %}
+                                                <img src="{{ n.photot.url }}" alt="{{ n.product.name }}" class='img-card-2'/>
+                                            {% else %}
+                                                <img src="{{ n.photot.url }}" style = "  filter: grayscale(100%);" alt="{{ n.product.name }}" class='img-card-2 calm'/>
+                                            {% endif %}
+                                            {% endif %}
+                                    {% endfor %}
+                                </div>
+                                <div class='card-bottom-2'>
+                                    <h3 class="ukkk">{{ i.name }}</h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

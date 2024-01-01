@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+/* Basic styling for the personal_data div */
+.personal_data {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    border: 1px solid #e0cccc;
+    /* color: black; */
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+/* Styling for labels and form controls */
+.personal_data div {
+    flex: 1; /* Each input div takes equal width */
+    display: flex;
+    flex-direction: column;
+}
+
+.personal_data label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-align: center; /* Center the label text horizontally */
+}
+
+.personal_data input {
+    width: 90%; /* Take up 100% width of the div */
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin: 0 auto !important;
+}
+
+/* Hover and focus effects for form controls */
+.personal_data input:hover,
+.personal_data input:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+    outline: none; /* Remove the outline on focus */
+}
+
+/* Styling for error messages */
+.personal_data .form-error {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover effect for error messages */
+.personal_data .form-error:hover {
+    color: darkred;
+}
+
+</style>
+<body>
+    <div class = "container roma">
+        <h1 id = 'san' style="text-align: center;
+                margin-top: 120px ;
+                font-size: 23px;">MAKE YOUR ORDER
+        </h1>
+        <form method="POST" , action="{% url 'check_out' %}" class="stop">
+            {% csrf_token %}
+            <input type="text" name="{{ form.session_key.html_name }}" value = "{{ session_key }}" class="form-control" style="display: none;">
+            {% if user.is_authenticated %}
+                <input name = 'id' value = "{{ user.id }}" class="form-control" style="display: none;">
+                <input type="email" name="{{ form.email.html_name }}" value = "{{ user.email }}" class="form-control" style="display: none;">
+                <input type="text" name="{{ form.name.html_name }}" value = "{{ user.username }}" class="form-control" style="display: none;">
+                <input type="number" name="{{ form.phon.html_name }}" value = "{{ user.phone }}" class="form-control" style="display: none;">
+                <input type="number" name="{{ form.age.html_name }}" value = "{{ user.age }}" class="form-control" style="display: none;">
+            {% else %}
+            <div class="upy">
+                <div class='personal_data'>
+                    <div>
+                        <label>Full Name</label>
+                        <span class="form-error">{{ form.name.errors }}</span>
+                        <input type="text" name="{{ form.name.html_name}}" class="form-control">
+                    </div>
+                    <div>
+                        <label>Phone Number</label>
+                        <span class="form-error">{{ form.phon.errors }}</span>
+                        <input type="number" name="{{form.phon.html_name}}" class="form-control">
+                    </div>
+                    <div>
+                        <label>Email</label>
+                        <span class="form-error">{{ form.email.errors }}</span>
+                        <input type="email" name="{{form.email.html_name}}" class="form-control">
+                    </div>
+                    <!-- <label>Age</label>
+                    <span class="form-error">{{ form.age.errors }}</span>
+                    <input type="number" name="{{form.age.html_name}}" class="form-control"> -->
+                </div>
+            {% endif %}
+            <table>
+                <tr>
+                    <th>name</th>
+                    <th>price</th>
+                    <th>amount</th>
+                    <th>totaly</th>
+                    <!-- <th>abolish</th> -->
+                </tr>
+                {% for i in productss %}
+                <tr class="veto">
+                    <td class="verona">{{ i.product.name }}</td>
+                    <td class = "product_price verona">{{ i.product.price_with_discount }}</td>
+                    <td class = "verona"><input name = '{{ i.product.id }}' class='numbers_of_product class{{ i.product.id }}' id="numberx2" value="{{ i.number }}" min = 1 type="number"
+                        data-product_id = '{{ i.product.id }}'
+                        data-product_name = "{{ i.product.name }}"
+                        data-product_price = "{{ i.product.price_with_discount }}" ></td>
+                    <td class="product_total_price verona">{{ i.product_total_price }}</td>
+                    <td class='abolish verona'><a data-product_id = '{{ i.product.id }}'
+                        data-product_name = "{{ i.product.name }}"
+                        data-product_price = "{{ i.product.price_with_discount }}"
+                        data-product_number = "{{ i.number }}" id="delete" class="uniqe">X</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+            <button type = 'submit' class="shkarp"><b id="idk">CHECK :</b> <b><span id="product_total_amount"></span>₴</b> </button>
+            </div>
+        </form>
+    </div> 
+</body>
+</html>
+{% endblock content %}

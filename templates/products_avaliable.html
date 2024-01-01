@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .line-rr , .line-ll{
+        top: 680px;
+    }
+    .line-rr{
+        right: 209px;
+    }
+    .line-ll{
+        left: 209px;
+    }
+    #av{
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #4ec67f; /* Button background color */
+        color: #fff; /* Text color */
+        border-radius: 5px; /* Rounded corners */
+        text-align: center;
+        text-decoration: none;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease; /* Smooth transition on hover */
+        margin: 20px; /* Add margin for spacing */
+    }
+    #av:hover {
+        background-color: #4ec67f; /* Darker background color on hover */
+    }
+    #nonpe{
+        text-align: right;
+        margin-right: 56px;
+    }
+</style>
+<div class="autoplay">
+    <div>
+        <img src="static/images/aaaa.png" class="bi_img" >
+    </div>
+    <div>
+        <img src="static/images/slider1.jpg"  class="bi_img">
+    </div>
+    <div>
+        <img src="static/images/aaaa.png"  class="bi_img">
+    </div>
+    <div>
+        <img src="static/images/slider1.jpg"  class="bi_img">
+    </div>
+</div>
+    <div class='line line-ll'></div>
+    <div class='line line-rr'></div>
+    <div class='main container'>
+        <h3 id='h3'>PRODUCTS AVA</h3>
+    </div>
+<div class="products-box">
+    <div class="container">
+        <div id="nonpe">
+            <a href = "{% url 'pro' %}" id="av">all</a>
+        </div>
+        <div class='wraper'>
+            {% for i in ava %}
+                <div class='test'>
+                    <div class='card'>
+                        <div class='card-top' style='position:relative;'>
+                            <button class="fav"><img src = "static/images/sos.png" ></button>
+                            {% if i.is_new and i.discount %}
+                                <p style='position:absolute;' class='h7dis'>{{i.discount}}% off</p>
+                                <p style='position:absolute;' class='h8dis'>new</p>
+                            {% elif i.discount %}
+                                <p style='position:absolute;' class='h5dis'>{{ i.discount }}% off</p>
+                            {% elif i.is_new %}
+                                <p style='position:absolute;' class='h6dis'>new</p>
+                            {% endif %}
+                            {% for n in i.photos_set.all %}
+                            {% if n.product.name == i.name %}
+                            {% if n.product.is_prespense %}
+                            
+                            <img src="{{ n.photot.url }}" alt="{{ i.product.name }}" class='img-card' id="kik"/>
+                            <a href="{{ i.get_absolute_url }}" style="display: none;" class="uno">
+                                <img src="{{ n.photot.url }}" alt="{{ i.product.name }}" class='img-card'/>
+                            </a>
+                            <h3 class="uk">{{ n }}</h3>
+                            {% else %}
+                            <img style = "filter: grayscale(100%);"src="{{ n.photot.url }}" alt="{{ i.product.name }}" class='img-card calm' id="kik"/>
+                            <a href="{{ i.get_absolute_url }}" style="display: none;" class="uno">
+                                <img class='megan_beer' style = "  filter: grayscale(100%);" src="{{ n.photot.url }}" alt="{{ i.product.name }}" class='img-card calm'/>
+                            </a>
+                            <h3 class="uk">{{ n }}</h3>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class='card-bottom'>
+
+                            {% if i.discount%}
+                            <div class='discount'>
+                                <h4 class='h4dis'>{{i.price_with_discount}}₴</h4>
+                                <h4 class='h4price'>{{i.price}}₴</h4>
+                            </div>
+                            {% else %}
+                                <h4 class='h4realprice'>{{ i.price }}₴</h4>
+                            {% endif %}
+
+                            <h3>{{i.name}}</h3>
+                            <p>{{i.description|slice:42}}...</p>
+                            <a href="{{ i.get_absolute_url }}">Show</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            <span class="step-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1">1</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                {% endif %}
+        
+                <span class="current">
+                    {{ page_obj.number }}
+                </span>
+        
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock content %}

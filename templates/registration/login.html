@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="login-container">
+        <h2 class="login-header">Log In</h2>
+        <form method="POST" class="custom-login-form">
+            {% csrf_token %}
+            <div class="custom-form-group">
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="custom-form-group">
+                <label for="{{ form.password.id_for_label }}">Password:</label>
+                {{ form.password }}
+                {{ form.password.errors }}
+            </div>
+            <button type="submit" class="custom-btn custom-btn-primary">Log In</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

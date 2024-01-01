@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width">
+    <link rel='stylesheet' href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/slick.css' %}"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main-2.js' %}"></script>
+
+    <title>Document</title>
+</head>
+<style>
+.nav {
+    position: fixed;
+    width: 40%;
+    height: 100%;
+    background-color: #4ec67f;
+    top: -100%;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    transition: all 0.3s ease-in-out;
+    transform: scale(0);
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+    z-index: 8;
+}
+    .nav-wrapper {
+        position: relative;
+        /* overflow: scroll !important; */
+        /* overflow-y: auto; */
+        height: 100%;
+    }
+    nav {
+        text-align: left;
+    }
+    nav a {
+        position: relative;
+        text-decoration: none;
+        color: #ffffff !important;
+        font-size: 20px;
+        display: inline-block;
+        margin-top: 10px;
+        transition: color 0.2s ease-in-out;
+        letter-spacing: 1px;
+    }
+    .hamburger div {
+        position: relative;
+        width: 37px;
+        height: 4px;
+        border-radius: 3px;
+        background-color: #ffffff;
+        margin-top: 8px;
+        transition: all 0.3s ease-in-out;
+    }
+    .hamburger {
+        display: none;
+        position: absolute;
+        top: 46px;
+        right: 5%;
+        margin-left: -2em;
+        margin-top: -45px;
+        width: 1em;
+        height: 45px;
+        z-index: 10000;
+    }
+    #toggle {
+        display: none;
+    }
+    #toggle:checked + .hamburger .top-bun {
+        transform: rotate(-45deg);
+        margin-top: 25px;
+    }
+    #toggle:checked + .hamburger .bottom-bun {
+        opacity: 0;
+        transform: rotate(45deg);
+    }
+    #toggle:checked + .hamburger .meat {
+        transform: rotate(45deg);
+        margin-top: -7px;
+    }
+
+    #toggle:checked + .hamburger + .nav {
+        top: 0;
+        transform: scale(1);
+    }
+</style>
+<body>
+    <form class="main_form" action="{% url 'busket_adding' %}"></form>
+    {% csrf_token %}
+    <p class='buy'></p>
+    <section id='one1'>
+        <header class='header-box-1'>
+            <div class='container header-1'>
+                <div class='left-1'>
+                    <a><p>HELP</p></a>
+                    <a><p>+380 63 247 45 85</p></a>
+                </div>
+                {% if user.is_authenticated %}
+                    <div class='right-1'>
+                        <a href = "{{ user.get_absolute_url }}"><p>My Account</p></a>
+                        <a href = "{% url 'logout' %}"><p>Log Out</p></a>
+                    </div>
+                {% else %}
+                    <div class="right-2">
+                        <a href = "{% url 'login' %}"><p>Login</p></a>
+                        <a href = "{% url 'register' %}">Register</a>
+                    </div>
+                {% endif %}
+            </div>
+        </header>
+        <header class='header-box'>
+            <div class='container header'>
+                <div class='left'>
+                    <div class='img'>
+                        <a href = "{% url 'index' %}">
+                            <img src='/static/images/TSHOP.png' class="img"></img>
+                        </a>
+                        
+                    </div>
+                    <div class='left-right'>
+                        <a href="{% url 'index' %}"><p>Home</p></a>
+                        <a href = "{% url 'new_products' %}"><p>New products</p></a>
+                        <a href = "{% url 'categories' %}"><p>Categories</p></a>
+                        <a href = "{% url 'feed_back' %}"><p>Feed back</p></a>
+                    </div>
+                </div>
+                <div class="busket_div">
+                    <ul class="busket_ul">
+                        {% if productss %}
+                            {% for i in productss %}
+                                <li>{{ i.product }} {{ i.product.price_with_discount }}₴ x {{ i.number }} {{ i.product_total_price }}₴ 
+                                    <a id="delete" data-product_id = "{{ i.product.id }}" data-product_name = "{{ i.product.name}}"
+                                    data-product_price = "{{ i.product.price_with_discount }}" data-product_number = "{{ i.number }}"
+                                    data-product_total_price = "{{ i.product_total_price}}"
+                                    data-products_amount = "{{ all_products }}">X</a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <p  id = 'wopp' style="font-size: 16px;">You haven't added products yet</p>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class='right'>
+                    <a class="busket_a"><p>Basket<span class='arbitrary'>[{{products_amount}}]</span></p></a>
+                    <a class="check_out" href = "{% url 'check_out' %}"><p>Check Out</p></a>
+                    <a href = "{{ user.get_absolute_url }}"><p>Account</p></a>
+                </div>
+                <input id="toggle" type="checkbox"></input>
+                <label for="toggle" class="hamburger">
+                    <div class="top-bun"></div>
+                    <div class="meat"></div>
+                    <div class="bottom-bun"></div>
+                </label>
+
+                <div class="nav">
+                    <div class="nav-wrapper">
+                        <nav>
+                            <div class="mid_divv">
+                                <a href="{% url 'index' %}" >HOME</a>
+                                <a href="{% url 'new_products' %}">NEW PRODUCTS</a>
+                                <a href="{% url 'categories' %}">CATEGORIES</a>
+                                <a href="{% url 'feed_back' %}" class="main_a" >FEED BACK</a>
+                                <a href = "{% url 'check_out' %}">CHECK OUT</a>
+                                <a class="busket_a2"><p style="margin: 0;">BASKET<span class='arbitrary'>[{{products_amount}}]</span></p></a>
+                                <p>_______________</p>
+                                {% if user.is_authenticated %}
+                                <a href = "{{ user.get_absolute_url }}">MY ACCOUNT</a>
+                                <a href = "{% url 'logout' %}">LOG OUT</a>
+                                {% else %}
+                                <a href = "{% url 'login' %}">Login</a>
+                                <a href = "{% url 'register' %}">Register</a>
+                                {% endif %}
+                                <a></a>
+                            </div>
+
+                        </nav>
+                    </div>
+                </div>
+
+            </div>
+        </header>
+    </section>
+    <section>
+        <div class="main-box">
+            {% block content %}
+            {% endblock content %}
+        </div>
+    </section>
+    <section>
+        <div class='footer-box testy nn medison fox'>
+            <div class="container footer">
+                <div class='footer-top'>
+                    <div class='top-top'>
+                        <h1 id='sup'>SUPPORT</h1>
+                        <h1 id="ft" style="width: 150px;">SHOP</h1>
+                        <h1>INFORMATION</h1>
+                        <h1 id='soc'>SOCIAL MEDIA</h1>
+                    </div>
+                    <div class='top-bottom'>
+                        <div class='support'>
+                            <h4>+380 63 247 45 85</h4>
+                            <p>posivakdmitro2@gmail.com</p>
+                        </div>
+                        <div class='shop'>
+                            <a style="text-decoration: none;
+                                      color: black;" href="{% url 'categories' %}">CATEGORIES</a>
+                        </div>
+                        <div class='information'>
+                            <p>ABOUT US</p>
+                        </div>
+                        <div class='social-media'>
+                            <img src="/static/images/facebook-app-symbol.png" id='m3' alt="" class="small-imeg2">
+                            <img src="/static/images/twitter.png" alt="" id='m2'class="small-imeg2">
+                            <img src="/static/images/social.png" alt="" id='m1'class="small-imeg2">
+                            <img src="/static/images/instagram (1).png" alt="" class="small-imeg2">
+                            <!-- <img src="static/images/google.png" alt=""class="small-imeg2"> -->
+                        </div>
+                    </div>
+                
+                </div>
+                <div class='footer-bottom'>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+    <!-- <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script type="text/javascript" src="static/js/main-2.js"></script> -->
+</body>
+</html>
