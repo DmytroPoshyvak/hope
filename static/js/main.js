@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    $(".shkarp").submit(function(e){
-        e.preventDefault()
-    })
+    // $(".shkarp").submit(function(e){
+    //     e.preventDefault()
+    // })
     $(document).on('click' , '#delete' , function(e){
         e.preventDefault();
         var btn = $(this)
